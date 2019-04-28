@@ -5,7 +5,7 @@ class Todo extends React.Component {
   render() {
     return (
     <li>
-      <button>X</button>
+      <button onClick={this.props.xClick}>X</button>
       <span style={{
         textDecoration: this.props.task.completed ? 'line-through' : 'none'
       }}>{this.props.task.taskText}</span>
