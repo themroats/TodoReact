@@ -4,7 +4,7 @@ class InputLine extends React.Component {
   render() {
     return (
       <div>
-        <input type="text"/><button>Submit</button>
+        <input type="text"/><button onClick={() => this.props.onSubmit("Test Task")}>Submit</button>
       </div>
     );
   }
