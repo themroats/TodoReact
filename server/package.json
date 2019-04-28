@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/bin/www",
+    "start": "node ./bin/www",
     "dev": "PORT=3001 dotenv nodemon ./src/bin/www --watch src --ignore src/logs"
   },
   "dependencies": {
