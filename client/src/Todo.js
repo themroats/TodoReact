@@ -3,7 +3,14 @@ import * as React from "react";
 class Todo extends React.Component {
 
   render() {
-    return <li><button>X</button> {this.props.task}</li>
+    return (
+    <li>
+      <button>X</button>
+      <span style={{
+        textDecoration: this.props.task.completed ? 'line-through' : 'none'
+      }}>{this.props.task.taskText}</span>
+      </li>
+        );
   }
 
 }
