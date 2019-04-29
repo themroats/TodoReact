@@ -1,10 +1,15 @@
 import * as React from "react";
 import TodoList from "./TodoList";
 import InputLine from "./InputLine";
+import axios from 'axios';
+import $ from 'jquery'
+import assert from 'assert';
+const apiUrl = "http://localhost:3001/todos";
 
-let dummyData = [{ taskText: "Yeet skeet", completed: true }, { taskText: "Skeet yeet", completed: false }, { taskText: "Catch 'em all", completed: false }];
+// let dummyData = [{ taskText: "Yeet skeet", completed: true }, { taskText: "Skeet yeet", completed: false }, { taskText: "Catch 'em all", completed: false }];
 
 class TodoApp extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {todos: []};
@@ -12,21 +17,50 @@ class TodoApp extends React.Component {
     this.removeTodo = this.removeTodo.bind(this);
     this.toggleTodo = this.toggleTodo.bind(this);
   }
+
   addTodo(task) {
-    dummyData.push({taskText: task, completed: false});
-    this.setState({todos: dummyData});
+    const newTask = {taskText: task, completed: false};
+    axios.post("http://localhost:3001/todos/add", newTask)
+      .then((response) => {
+        this.setState({ todos: this.state.todos.concat(response.data)});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-  removeTodo(index) {
-    dummyData.splice(index, 1);
-    this.setState({todos: dummyData});
+
+  removeTodo(id) {
+    axios.post(apiUrl + '/remove', id).then((response) => {
+      console.log(response);
+      this.setState({ todos: this.state.todos.concat(response.data)});
+    }).catch((e) => {
+      console.log(e);
+    });
   }
-  toggleTodo(index) {
-    dummyData[index].completed = !dummyData[index].completed;
-    this.setState({todos: dummyData});
+
+  toggleTodo(id) {
+    axios.post(apiUrl + '/toggle', {"id": id}).then(() => {
+      this.setState((state) => {
+        $.each(state.todos, function() {
+          if (this._id === id) {
+            this.completed = !this.completed;
+          }
+        });
+      });
+      this.forceUpdate();
+    }).catch((e) => {
+      console.log(e);
+    });
   }
+
   componentDidMount() {
-    this.setState({todos: dummyData});
+    axios.get(apiUrl + '/all').then((response) => {
+      this.setState({todos: response.data});
+    }).catch((error) => {
+      console.log(error);
+    });
   }
+
   render() {
     return (
       <div>

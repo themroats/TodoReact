@@ -1,10 +1,20 @@
 const express = require('express');
 const TodoItem = require('../models/TodoItem');
+const assert = require('assert');
 const router = express.Router();
 
-router.get('/add', (req, res) => {
+router.all('/add', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+router.post('/add', (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+  console.log(req.body);
   const testTodo = new TodoItem({
-    task: "test task"
+    task: req.body.taskText
   });
 
   testTodo.save()
@@ -16,6 +26,26 @@ router.get('/add', (req, res) => {
     })
 });
 
+router.get('/all', (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  TodoItem.find({}, (err, todos) => {
+    res.send(todos);
+  });
+});
+
+router.post('/toggle', (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  TodoItem.findById(req.body.id,  (err, doc) => {
+    if (err) {
+      console.log(err);
+    }
+    doc.completed = !doc.completed;
+    doc.save();
+  });
+  res.send();
+});
 
 module.exports = router;
 

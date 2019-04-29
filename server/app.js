@@ -27,6 +27,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/todos', todosRouter);
 
+
+
 // // Render React page
 // app.use(express.static(path.join(__dirname, "../client/public/")));
 // app.get("/*", (req, res) => {

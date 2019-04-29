@@ -7,6 +7,7 @@
     "dev": "PORT=3001 dotenv nodemon ./src/bin/www --watch src --ignore src/logs"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^7.0.0",
