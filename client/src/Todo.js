@@ -6,8 +6,8 @@ class Todo extends React.Component {
   render() {
     return (
     <li>
-      <button onClick={() => this.props.xClick(this.props.task._id)}>X</button>
-      <button onClick={() => this.props.toggleClick(this.props.task._id)}>Toggle</button>
+      <button onDoubleClick={() => this.props.xClick(this.props.task._id)}>X</button>
+      <button onDoubleClick={() => this.props.toggleClick(this.props.task._id)}>Toggle</button>
 
       <span style={{
         textDecoration: this.props.task.completed ? 'line-through' : 'none'
