@@ -1,12 +1,22 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const mongoose = require('mongoose');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
-var app = express();
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const todosRouter = require('./routes/todos');
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true }).then(() => {
+  console.log("connected to mongo");
+}).catch((e) => {
+  console.log(e);
+});
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -15,11 +25,12 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/todos', todosRouter);
 
-// Render React page
-app.use(express.static(path.join(__dirname, "../client/build/")));
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
-});
+// // Render React page
+// app.use(express.static(path.join(__dirname, "../client/public/")));
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/public/index.html"));
+// });
 
 module.exports = app;

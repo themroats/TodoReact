@@ -1,4 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
+
 
 const todoItemSchema = new mongoose.Schema({
   task: { type: String, required: true },
