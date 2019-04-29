@@ -1,5 +1,6 @@
 const express = require('express');
 const TodoItem = require('../models/TodoItem');
+const assert = require('assert');
 const router = express.Router();
 
 router.all('/add', function(req, res, next) {
@@ -42,17 +43,6 @@ router.post('/toggle', (req, res) => {
     }
     doc.completed = !doc.completed;
     doc.save();
-  });
-  res.send();
-});
-
-router.post('/remove', (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  TodoItem.findByIdAndDelete(req.body.id,  (err, doc) => {
-    if (err) {
-      console.log(err);
-    }
   });
   res.send();
 });

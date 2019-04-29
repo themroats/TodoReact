@@ -3,6 +3,7 @@ import TodoList from "./TodoList";
 import InputLine from "./InputLine";
 import axios from 'axios';
 import $ from 'jquery'
+import assert from 'assert';
 const apiUrl = "http://localhost:3001/todos";
 
 // let dummyData = [{ taskText: "Yeet skeet", completed: true }, { taskText: "Skeet yeet", completed: false }, { taskText: "Catch 'em all", completed: false }];
@@ -29,16 +30,9 @@ class TodoApp extends React.Component {
   }
 
   removeTodo(id) {
-    axios.post(apiUrl + '/remove', {"id": id}).then((response) => {
-      this.setState((state) => {
-        for(let i = 0; i < state.todos.length; i++){
-          if ( state.todos[i]._id === id) {
-            state.todos.splice(i, 1);
-            i--;
-          }
-        }
-        return {todos: state.todos};
-      });
+    axios.post(apiUrl + '/remove', id).then((response) => {
+      console.log(response);
+      this.setState({ todos: this.state.todos.concat(response.data)});
     }).catch((e) => {
       console.log(e);
     });
@@ -52,8 +46,8 @@ class TodoApp extends React.Component {
             this.completed = !this.completed;
           }
         });
-        return {todos: state.todos};
       });
+      this.forceUpdate();
     }).catch((e) => {
       console.log(e);
     });
@@ -67,12 +61,10 @@ class TodoApp extends React.Component {
     });
   }
 
-
-
   render() {
     return (
       <div>
-        <InputLine onKey={this.handleKey} onSubmit={this.addTodo}/>
+        <InputLine onSubmit={this.addTodo}/>
         <TodoList todoToggleClick={this.toggleTodo} todoXClick={this.removeTodo} todos={this.state.todos}/>
       </div>
     );
