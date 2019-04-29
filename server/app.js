@@ -18,6 +18,11 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true }).then(() => {
 
 const app = express();
 
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
